@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>2002 SIR Ichalkaranji</title>
+
+<style>
+
+body{
+font-family: system-ui;
+margin:0;
+background:linear-gradient(135deg,#1d2671,#c33764);
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:12px;
+box-sizing:border-box;
+}
+
+.header{
+color:white;
+text-align:center;
+margin-top:20px;
+padding:0 10px;
+}
+
+.card{
+
+background:white;
+padding:15px;
+border-radius:14px;
+margin-top:15px;
+width:100%;
+box-sizing:border-box;
+
+}
+
+input,button{
+
+width:100%;
+padding:14px;
+margin-top:10px;
+font-size:16px;
+border-radius:10px;
+border:1px solid #ddd;
+box-sizing:border-box;
+
+}
+
+button{
+
+background:linear-gradient(90deg,#2193b0,#6dd5ed);
+color:white;
+font-weight:bold;
+border:none;
+
+}
+
+.result{
+
+background:#f7f7f7;
+padding:12px;
+margin-top:12px;
+border-radius:10px;
+
+}
+
+.file{
+
+font-size:12px;
+color:#666;
+
+}
+
+mark{
+
+background:yellow;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h2>🗳 2002 SIR Ichalkaranji</h2>
+
+मतदार यादी शोधा
+
+</div>
+
+
+<div class="card">
+
+<input id="q"
+
+placeholder="नाव शोधा">
+
+
+<button onclick="search()">
+
+🔍 शोधा
+
+</button>
+
+
+<div id="count"></div>
+
+<div id="results"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let data=[];
+
+async function load(){
+
+let r=await fetch("data.json");
+
+data=await r.json();
+
+document.getElementById("count")
+
+.innerHTML="Total records: "+data.length;
+
+}
+
+
+function highlight(text,word){
+
+return text.replaceAll(
+
+word,
+
+"<mark>"+word+"</mark>"
+
+);
+
+}
+
+
+function search(){
+
+let q=document.getElementById("q")
+
+.value.toLowerCase();
+
+let html="";
+
+let total=0;
+
+data.forEach(r=>{
+
+if(r.text.toLowerCase().includes(q)){
+
+total++;
+
+html+=`
+
+<div class="result">
+
+<div>${highlight(r.text,q)}</div>
+
+<div class="file">
+
+${r.area} | ${r.file} (line ${r.line})
+
+</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+
+document.getElementById("results")
+
+.innerHTML=html;
+
+document.getElementById("count")
+
+.innerHTML="Found "+total+" results";
+
+}
+
+
+load();
+
+</script>
+
+</body>
+
+</html>
